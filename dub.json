@@ -1,0 +1,15 @@
+{
+    "name": "huntblog",
+    "description": "An blog application based on hunt framework.",
+    "copyright": "Copyright © 2017, huntframework.com",
+    "homepage": "http://www.huntframework.com/",
+    "license": "BSD",
+    "targetType" : "executable",
+    "authors": [
+        "zoujiaqing"
+    ],
+    "mainSourceFile": "./source/bootstrap.d",
+    "dependencies": {
+        "hunt" : "~>0.10.1"
+    }
+}
