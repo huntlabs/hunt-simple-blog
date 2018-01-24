@@ -26,10 +26,3 @@ class Post : Entity
     @Field("post_type")
     string type;
 }
-
-class BlogService
-{
-    CriteriaBuilder criteria = entityManager.createCriteriaBuilder!UserRoom;
-    criteria.where(criteria.eq(criteria.UserRoom.room_id, roomId));   
-    return entityManager.getResultList!UserRoom(criteria.toString);
-}
