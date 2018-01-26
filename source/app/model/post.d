@@ -1,14 +1,16 @@
-module app.repository.post;
+module app.model.post;
 
-import hunt.model;
 import app.entity.post;
+
+import entity;
+import hunt;
 
 class PostModel
 {
     Post[] getPosts()
     {
         CriteriaBuilder criteria = entityManager.createCriteriaBuilder!Post;
-        criteria.where(criteria.eq(criteria.UserRoom.room_id, roomId));
+        criteria.createCriteriaQuery();
         return entityManager.getResultList!Post(criteria.toString);
     }
 }

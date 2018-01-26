@@ -1,4 +1,4 @@
-module app.model.post;
+module app.entity.post;
 
 import entity;
 
@@ -7,22 +7,16 @@ class Post : Entity
 {
     @AutoIncrement
     @PrimaryKey
-    @Field("ID")
     int id;
 
-    @Field("post_author")
-    int uid;
+    int post_author;
 
-    @Field("post_tile")
-    string title;
+    string post_tile;
 
-    @Field("post_content")
-    string content;
+    string post_content;
 
-    @Field("post_status")
-    string status;
+    string post_status;
 
     // post & page
-    @Field("post_type")
-    string type;
+    string post_type;
 }

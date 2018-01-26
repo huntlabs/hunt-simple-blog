@@ -11,5 +11,11 @@
     "mainSourceFile": "./source/bootstrap.d",
     "dependencies": {
         "hunt" : "~>0.10.1"
-    }
+    },
+    "configurations": [{
+        "name": "default",
+        "subConfigurations": {
+            "hunt": "full"
+        }
+    }]
 }

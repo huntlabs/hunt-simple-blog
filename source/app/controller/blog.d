@@ -12,7 +12,7 @@ class IndexController : Controller
     @Action
     void list()
     {
-        auto postModel = PostModel;
+        auto postModel = new PostModel;
         Post[] posts = postModel.getPosts();
         foreach(post; posts)
         {
