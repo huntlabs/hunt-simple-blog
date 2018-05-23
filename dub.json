@@ -10,7 +10,7 @@
     ],
     "mainSourceFile": "./source/bootstrap.d",
     "dependencies": {
-        "hunt" : "~>0.10.1"
+        "hunt" : "~>1.0.0-beta.1"
     },
     "configurations": [{
         "name": "default",

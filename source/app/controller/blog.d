@@ -2,23 +2,23 @@ module app.controller.blog;
 
 import hunt;
 
-import app.entity.post;
-import app.model.post;
+import app.repository.PostRepository;
+import app.model.Post;
 
-class IndexController : Controller
+class BlogController : Controller
 {
     mixin MakeController;
 
     @Action
-    void list()
+    Response list()
     {
-        auto postModel = new PostModel;
-        Post[] posts = postModel.getPosts();
+        auto repository = new PostRepository;
+        Post[] posts = repository.findAll();
         foreach(post; posts)
         {
             tracef("post id:  %d", post.id);
         }
 
-        response.html("Hello.");
+	return "Hello.";
     }
 }

@@ -1,4 +1,4 @@
-module app.entity.post;
+module app.model.Post;
 
 import entity;
 
