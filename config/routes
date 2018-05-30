@@ -2,4 +2,8 @@
 # [GET,POST,PUT...]    path    controller.method
 #
 
-* / blog.list
+GET /index blog.list
+
+GET /post blog.post
+
+POST /comment blog.postComment

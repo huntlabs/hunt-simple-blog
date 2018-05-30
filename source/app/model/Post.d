@@ -11,7 +11,11 @@ class Post : Entity
 
     int post_author;
 
+    //@Column("post_title")
+    //string title;
     string post_title;
+
+    string post_excerpt;
 
     string post_content;
 
