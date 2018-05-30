@@ -11,9 +11,11 @@ class Post : Entity
 
     int post_author;
 
-    string post_tile;
+    string post_title;
 
     string post_content;
+
+    string post_date;
 
     string post_status;
 
