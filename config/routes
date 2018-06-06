@@ -3,7 +3,6 @@
 #
 
 GET /index blog.list
-
 GET /post blog.post
-
 POST /comment blog.postComment
+

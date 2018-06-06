@@ -12,6 +12,8 @@ import app.repository.CommentsRepository;
 import app.model.Comments;
 import entity.domain;
 import std.datetime;
+import entity.DefaultEntityManagerFactory;
+
 
 class BlogController : Controller
 {
@@ -20,78 +22,23 @@ class BlogController : Controller
     @Action
     string list()
     {
-        auto repository = new PostRepository;
-        auto repositoryUsers = new UsersRepository;
-        Post[] posts = repository.findAll();
-        JSONValue s;
-        JSONValue res;
-        s.array = [];
-        foreach(post;posts){
-            JSONValue t;
-            t["id"] = post.id;
-            Users user = repositoryUsers.findById(post.post_author);
-            if(user !is null){
-                t["post_author"] = user.display_name;
-            }else{
-                t["post_author"] = "匿名";
-            }
-            t["post_title"] = post.post_title;
-            t["post_excerpt"] = post.post_excerpt;
-            t["post_date"] = post.post_date;
-            t["post_content"] = post.post_content;
-            s.array ~= t;
-        }
-        res["posts"] = s;
-        return view.render("index", res);
+        view.assign("posts", (new PostRepository).findAll());
+        return view.render("index");
     }
 
     @Action
     string post()
     {
         int id = request.get!int("id");
-        auto repository = new PostRepository;
-        auto repositoryUsers = new UsersRepository;
-        auto repositoryComments = new CommentsRepository;
-        Post post = repository.findById(id);
-        JSONValue resData;
-        JSONValue t;
-
-        t["id"] = post.id;
-        Users user = repositoryUsers.findById(post.post_author);
-        if(user !is null){
-            t["post_author"] = user.display_name;
-        }else{
-            t["post_author"] = "匿名";
+        auto em = defaultEntityManagerFactory().createEntityManager();
+        auto post = em.find!(Post)(id);
+        foreach(ref value; post.getComments()) {
+            value.post = null;
         }
-        t["post_title"] = post.post_title;
-        t["post_excerpt"] = post.post_excerpt;
-        t["post_date"] = post.post_date;
-        t["post_content"] = post.post_content;
-        resData["post"] = t;
-        class MySpecification: Specification!Comments
-		{
-			Predicate toPredicate(Root!Comments root, CriteriaQuery!Comments criteriaQuery ,
-				CriteriaBuilder criteriaBuilder)
-			{
-				Predicate _name = criteriaBuilder.equal(root.Comments.comment_post_id, id);
-				return criteriaBuilder.and(_name);
-			}
-		}
-        Comments[] comments= repositoryComments.findAll(new MySpecification(), new Sort("comment_date", OrderBy.DESC));
-
-        JSONValue commentsArr;
-        commentsArr.array = [];
-        foreach(comment;comments){
-            JSONValue tmpObj;
-            tmpObj["comment_id"] = comment.comment_id;
-            tmpObj["comment_post_id"] = comment.comment_post_id;
-            tmpObj["comment_author"] = comment.comment_author;
-            tmpObj["comment_date"] = comment.comment_date;
-            tmpObj["comment_content"] = comment.comment_content;
-            commentsArr.array ~= tmpObj;
-        }
-        resData["comments"] = commentsArr;
-        return view.render("post", resData);
+        view.assign("post", post);
+        view.assign("comments", post.getComments());
+        em.close();
+        return view.render("post"); 
     }
 
     @Action
@@ -100,13 +47,22 @@ class BlogController : Controller
         int postId = request.post!int("post_id");
         string commentAuthor = request.post!string("author");
         string commentContent = request.post!string("content");
-        auto repositoryComments = new CommentsRepository;
+
+
+        auto em = defaultEntityManagerFactory().createEntityManager();
+        em.getTransaction().begin();
+        auto post = em.find!(Post)(postId);
+        if (post is null)
+            return "failed";
         Comments createData = new Comments();
-        createData.comment_post_id = postId;
+        createData.post = post;
         createData.comment_author = commentAuthor;
         createData.comment_content = commentContent;
         createData.comment_date = Clock.currTime.toISOExtString(); //Clock.currStdTime();
-        repositoryComments.save(createData);
+        em.persist(createData);
+        em.getTransaction().commit();
+        em.close();
+
         return "success";
     }
 }
