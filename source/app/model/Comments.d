@@ -2,22 +2,16 @@ module app.model.Comments;
 
 import entity;
 
-public import app.model.Post;
-
 @Table("hb_comments")
-class Comments : Entity
+class Comments
 {
-    mixin GetFunction;
+    mixin MakeEntity;
 
     @AutoIncrement
     @PrimaryKey
     int comment_id;
 
-    // int comment_post_id;
-    @ManyToOne()
-    @JoinColumn("comment_post_id")
-    Post post;
-
+    int comment_post_id;
 
     string comment_author;
 

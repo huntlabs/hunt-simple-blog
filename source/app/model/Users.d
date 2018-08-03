@@ -5,9 +5,9 @@ import entity;
 public import app.model.Post;
 
 @Table("hb_users")
-class Users : Entity
+class Users
 {
-    mixin GetFunction;
+    mixin MakeEntity;
 
     @AutoIncrement
     @PrimaryKey
@@ -19,6 +19,4 @@ class Users : Entity
 
     string user_url;
 
-    @OneToMany("user")
-    Post[] posts;
 }

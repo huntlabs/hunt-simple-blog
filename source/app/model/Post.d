@@ -1,24 +1,19 @@
 module app.model.Post;
 
 import entity;
-
-public import app.model.Users;
-
-public import app.model.Comments;
-
+import app.model.Users;
 @Table("hb_posts")
-class Post : Entity
+class Post
 {
-    mixin GetFunction;
+    mixin MakeEntity;
 
     @AutoIncrement
     @PrimaryKey
     int id;
 
-    // int post_author;
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn("post_author")
-    Users user;
+    Users users;
 
     //@Column("post_title")
     //string title;
@@ -34,8 +29,4 @@ class Post : Entity
 
     // post & page
     string post_type;
-
-    @OneToMany("post")
-    Comments[] comments;
-
 }
