@@ -7,5 +7,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="hunt-1.0.3" level="project" />
+    <orderEntry type="library" name="entity-1.4.5" level="project" />
+    <orderEntry type="library" name="database-0.1.7" level="project" />
+    <orderEntry type="library" name="cache-0.0.6" level="project" />
+    <orderEntry type="library" name="kiss-0.4.8" level="project" />
+    <orderEntry type="library" name="dredis-0.0.9" level="project" />
+    <orderEntry type="library" name="libmemcached-1.1.1" level="project" />
+    <orderEntry type="library" name="rocksdb-0.0.7" level="project" />
+    <orderEntry type="library" name="collie-0.10.15" level="project" />
   </component>
 </module>

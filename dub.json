@@ -6,6 +6,12 @@
     "license": "BSD",
     "targetType" : "executable",
     "dependencies": {
-        "hunt" : "~>1.0.0"
-    }
+        "hunt" : "~>1.2.0"
+    },
+    "configurations": [{
+        "name": "default",
+        "subConfigurations": {
+            "hunt":"mysql"
+        }
+    }]
 }
