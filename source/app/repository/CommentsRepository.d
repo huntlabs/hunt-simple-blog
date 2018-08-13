@@ -40,4 +40,19 @@ class CommentsRepository : EntityRepository!(Comments, int)
         comments = typedQuery.getResultList();
         return comments;
     }
+
+    Comments[] getCommentsByUser(int user_id)
+    {
+        auto objects = this.newObjects();
+
+        auto p1 = objects.builder.equal(objects.root.Comments.user_id, user_id);
+
+        auto typedQuery = _entityManager.createQuery(objects.criteriaQuery.select(objects.root).where( p1 ));
+
+        Comments[] comments = typedQuery.getResultList();
+        if(comments.length > 0)
+            return comments;
+        return null;
+    }
+
 }

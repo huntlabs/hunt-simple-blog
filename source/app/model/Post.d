@@ -11,7 +11,7 @@ class Post
     @PrimaryKey
     int id;
 
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn("post_author")
     Users users;
 
@@ -26,6 +26,8 @@ class Post
     string post_date;
 
     string post_status;
+
+    //int post_author;
 
     // post & page
     string post_type;

@@ -11,6 +11,8 @@ class Comments
     @PrimaryKey
     int comment_id;
 
+    int user_id;
+
     int comment_post_id;
 
     string comment_author;

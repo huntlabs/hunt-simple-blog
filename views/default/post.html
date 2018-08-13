@@ -40,7 +40,8 @@
             <div class="card-body">
                 <form action="/comment?post_id={{post.id}}" method="post">
                     <div class="form-group">
-                        <input type="hidden" name="author" value="匿名">
+                        <input type="hidden" name="author_id" value="{% if user.id !=0 %}{{user.id}}{% else %}0{% endif %}">
+                        <input type="hidden" name="author" value="{% if user.id !=0 %}{{user.user_login}}{% else %}匿名{% endif %}">
                         <textarea name="content" class="form-control" rows="3"></textarea>
                     </div>
                     <button id="submit-comment-btn" type="button" class="btn btn-primary">Submit</button>

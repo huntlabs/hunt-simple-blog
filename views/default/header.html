@@ -43,6 +43,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
+                {% if user.id != 0 %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">{{user.user_login}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/loginpage">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

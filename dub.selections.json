@@ -1,0 +1,14 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"cache": "0.0.6",
+		"collie": "0.10.15",
+		"database": "0.1.7",
+		"dredis": "0.0.9",
+		"entity": "1.5.7",
+		"hunt": "1.2.0",
+		"kiss": "0.4.8",
+		"libmemcached": "1.1.1",
+		"rocksdb": "0.0.7"
+	}
+}

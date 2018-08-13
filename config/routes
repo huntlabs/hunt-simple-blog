@@ -4,5 +4,10 @@
 
 GET /index blog.list
 GET /post blog.post
+GET /loginpage blog.loginpage
+GET /logout blog.logout
+GET /profile blog.profile
+GET /registerpage blog.registerpage
 POST /comment blog.postComment
-
+POST /login blog.login
+POST /register blog.register
