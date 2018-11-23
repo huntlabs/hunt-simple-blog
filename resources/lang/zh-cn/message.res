@@ -7,7 +7,6 @@ register = 注册
 
 login = 登陆
 logout = 登出
-
 about = 关于
 
 re-password = 再次输入密码
@@ -16,5 +15,4 @@ leave-comment = 留言
 
 location = 位置
 mobile = 手机
-
 save = 保存

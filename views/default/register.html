@@ -3,13 +3,13 @@
 <form method="post" action="/register">
     <div class="form-group">
         <p class="input-wrapper">
-            <input type="text" placeholder="{{lang('message.name')}}" name="name"/><br>
+            <input type="text" placeholder="{{lang('message.name')}}" name="name" value = "{% if length(RegisterForm)> 0 %}{{RegisterForm.name}}{% endif %}" /><br>
         </p>
         <p class="input-wrapper">
-            <input type="password" placeholder="{{lang('message.password')}}" name="password"/><br>
+            <input type="password" placeholder="{{lang('message.password')}}" name="password" value = "{% if length(RegisterForm)> 0 %}{{RegisterForm.password}}{% endif %}" /><br>
         </p>
         <p class="input-wrapper">
-            <input type="text" placeholder="{{lang('message.email')}}" name="email"/><br>
+            <input type="text" placeholder="{{lang('message.email')}}" name="email" value = "{% if length(RegisterForm)> 0 %}{{RegisterForm.email}}{% endif %}"/><br>
         </p>
         <input type="submit" class="proceed__button btn submit" value="{{lang('message.submit')}}"/>
     </div>

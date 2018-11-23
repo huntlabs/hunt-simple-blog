@@ -1,8 +1,8 @@
-module app.form.FormLogin;
+module app.form.LoginForm;
 
 import hunt.framework;
 
-class FormLogin : Form
+class LoginForm : Form
 {
     mixin MakeForm;
 

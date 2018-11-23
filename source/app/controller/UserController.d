@@ -17,8 +17,8 @@ import app.model.User;
 import app.model.Comment;
 import app.model.Post;
 
-import app.form.FormRegister;
-import app.form.FormLogin;
+import app.form.RegisterForm;
+import app.form.LoginForm;
 
 import app.repository.PostRepository;
 import app.repository.UsersRepository;
@@ -28,49 +28,43 @@ class UserController : Controller
 {
     mixin MakeController;
 
-    @Action string login_page()
+    @Action Response login(LoginForm fl)
     {
-        view.assign("user", new User());
-        return view.render("login");
-    }
-
-    @Action string register_page()
-    {
-        return view.render("register");
-    }
-
-    @Action Response login(FormLogin fl)
-    {
-        auto result = fl.valid();
-        if (result.isValid())
+        if (request.method() == "POST")
         {
-            auto find = (new UsersRepository).findByUserlogin(fl.name);
-            if (find)
+            view.assign("LoginForm",fl);
+            auto result = fl.valid();
+            if (result.isValid())
             {
-                auto md5 = new MD5Digest();
-                ubyte[] hash = md5.digest(fl.password);
-                if (find.user_pass == toLower(toHexString(hash)))
+                auto find = (new UsersRepository).findByUserlogin(fl.name);
+                if (find)
                 {
-                    HttpSession session = request.session(true);
-                    logDebug("write User : ", cast(string) serialize!User(find));
 
-                    session.set("USER", cast(string) serialize!User(find));
-                    request.flush();
-                    return new RedirectResponse(this.request, "/index");
+                    auto md5 = new MD5Digest();
+                    ubyte[] hash = md5.digest(fl.password);
+                    if (find.user_pass == toLower(toHexString(hash)))
+                    {
+                        HttpSession session = request.session(true);
+                        // logDebug("write User : ", cast(string) serialize!User(find));
+
+                        session.set("USER", cast(string) serialize!User(find));
+                        request.flush();
+                        return new RedirectResponse(this.request, "/index");
+                    }
+                    else
+                    {
+                        view.assign("errorMessages", ["Password Error"]);
+                    }
                 }
+                else
+                    view.assign("errorMessages", ["The user does not exist"]);
             }
-            return new RedirectResponse(this.request, "/loginpage");
+            else
+                view.assign("errorMessages", result.messages());
+        }
 
-        }
-        else
-        {
-            Response response = new Response(this.request);
-            response.setHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=utf-8");
-            view.assign("user", new User());
-            view.assign("errorMessages", result.messages());
-            response.setContent(view.render("login"));
-            return response;
-        }
+        response.setContent(view.render("login"));
+        return response;
     }
 
     @Action Response logout()
@@ -84,7 +78,59 @@ class UserController : Controller
             }
             request.flush();
         }
-        return new RedirectResponse(this.request, "/index");
+        return new RedirectResponse(this.request, "/login");
+    }
+
+
+    @Action Response register(RegisterForm fr)
+    {
+        if (request.method() == "POST")
+        {
+            view.assign("RegisterForm",fr);
+            auto result = fr.valid();
+            if (result.isValid())
+            {
+                auto find = (new UsersRepository).findByUserlogin(fr.name);
+                if (find is null)
+                {
+                    auto md5 = new MD5Digest();
+                    ubyte[] hash = md5.digest(fr.password);
+                    User user = new User();
+                    user.user_login = fr.name;
+                    user.display_name = fr.name;
+                    user.user_nicename = fr.name;
+                    user.user_pass = toLower(toHexString(hash));
+                    user.user_email = fr.email;
+                    user.user_registered = Clock.currTime.toISOExtString();
+                    (new UsersRepository).save(user);
+                    return new RedirectResponse(this.request, "/login");
+                }
+                else
+                {
+                    view.assign("errorMessages", ["The user is registered"]);
+                }
+            }
+            else
+                view.assign("errorMessages", result.messages());
+        }
+
+        response.setContent(view.render("register"));
+        return response;
+
+    }
+
+    @Action Response profile()
+    {
+        auto user = checkUser(request);
+        if (user is null)
+            return new RedirectResponse(this.request, "/login");
+
+        view.assign("posts", (new PostRepository).getPostByUser(user.id));
+        view.assign("comments", (new CommentRepository).getCommentsByUser(user.id));
+        view.assign("user", user);
+
+        response.setContent(view.render("profile"));
+        return response;
     }
 
     static public User checkUser(Request request)
@@ -98,58 +144,5 @@ class UserController : Controller
         if (str is null)
             return null;
         return unserialize!User(cast(byte[]) str);
-    }
-
-    @Action Response register(FormRegister fr)
-    {
-        auto result = fr.valid();
-        if (result.isValid())
-        {
-            auto find = (new UsersRepository).findByUserlogin(fr.name);
-            if (find)
-            {
-                return new RedirectResponse(this.request, "/registerpage");
-            }
-            else
-            {
-                auto md5 = new MD5Digest();
-                ubyte[] hash = md5.digest(fr.password);
-                User user = new User();
-                user.user_login = fr.name;
-                user.display_name = fr.name;
-                user.user_nicename = fr.name;
-                user.user_pass = toLower(toHexString(hash));
-                user.user_email = fr.email;
-                user.user_registered = Clock.currTime.toISOExtString(); //Clock.currStdTime();
-                (new UsersRepository).save(user);
-                return new RedirectResponse(this.request, "/loginpage");
-            }
-        }
-        else
-        {
-            Response response = new Response(this.request);
-            response.setHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=utf-8");
-            view.assign("user", new User());
-            view.assign("errorMessages", result.messages());
-            response.setContent(view.render("register"));
-            return response;
-        }
-    }
-
-    @Action Response profile()
-    {
-        auto user = checkUser(request);
-        if (user is null)
-            return new RedirectResponse(this.request, "/loginpage");
-
-        view.assign("posts", (new PostRepository).getPostByUser(user.id));
-        view.assign("comments", (new CommentRepository).getCommentsByUser(user.id));
-        view.assign("user", user);
-
-        Response response = new Response(this.request);
-        response.setHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=utf-8");
-        response.setContent(view.render("profile"));
-
-        return response;
     }
 }

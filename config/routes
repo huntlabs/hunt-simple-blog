@@ -3,16 +3,16 @@
 #
 
 
-GET                         /loginpage                  user.login_page
+GET                         /login                      user.login
+POST                        /login                      user.login
+GET                         /register                   user.register
+POST                        /register                   user.register
 GET                         /logout                     user.logout
 GET                         /profile                    user.profile
-GET                         /registerpage               user.register_page
-POST                        /login                      user.login
-POST                        /register                   user.register
 
 GET                         /index                      blog.list
 GET                         /post                       blog.post
-POST                        /comment                    blog.post_comment
+POST                        /comment                    blog.comment
 
 GET                         /zh                         lang.zh
 GET                         /en                         lang.en

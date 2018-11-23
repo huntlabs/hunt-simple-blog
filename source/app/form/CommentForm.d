@@ -1,8 +1,8 @@
-module app.form.FormComment;
+module app.form.CommentForm;
 
 import hunt.framework;
 
-class FormComment : Form
+class CommentForm : Form
 {
     mixin MakeForm;
 

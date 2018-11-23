@@ -10,20 +10,20 @@ class CommentRepository : EntityRepository!(Comment, int)
 
     this(EntityManager manager = null)
     {
-        super(manager);
         _entityManager = manager is null ? createEntityManager() : manager;
+        super(_entityManager);
     }
 
     Comment[] findPostComments(int id)
     {
-        auto query = _entityManager.createQuery!(Comment)("select c from Comment c where c.comment_post_id = :postId ;");
+        auto query = _entityManager.createQuery!(Comment)("SELECT c FROM Comment c WHERE c.comment_post_id = :postId ;");
         query.setParameter("postId",id);
         return query.getResultList();
     }
 
     Comment[] getCommentsByUser(int user_id)
     {
-        auto query = _entityManager.createQuery!(Comment)("select c from Comment c where c.user_id = :uid ;");
+        auto query = _entityManager.createQuery!(Comment)("SELECT c FROM Comment c WHERE c.user_id = :uid ;");
         query.setParameter("uid",user_id);
         return query.getResultList();
     }

@@ -11,14 +11,14 @@ class PostRepository : EntityRepository!(Post, int)
 
     this(EntityManager manager = null)
     {
-        super(manager);
         _entityManager = manager is null ? createEntityManager() : manager;
+        super(_entityManager);
     }
 
 
     Post[] getPostByUser(int user_id)
     {
-        auto query = _entityManager.createQuery!(Post)("select p , u from Post p join p.user u where u.id = :uid ;");
+        auto query = _entityManager.createQuery!(Post)("SELECT p , u FROM Post p JOIN p.user u WHERE u.id = :uid ;");
         query.setParameter("uid",user_id);
 
         return query.getResultList();

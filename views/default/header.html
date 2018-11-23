@@ -37,22 +37,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">{{lang("message.about")}}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-                {% if user.id != 0 %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile">{{user.user_login}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">{{lang("message.logout")}}</a>
-                </li>
+                {% if length(user) != 0 %}
+                    {% if user.id != 0 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">{{user.user_login}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">{{lang("message.logout")}}</a>
+                        </li>
+                    {% endif %}
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/loginpage">{{lang("message.login")}}</a>
+                    <a class="nav-link" href="/login">{{lang("message.login")}}</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
@@ -62,10 +58,6 @@
                     <a class="nav-link" href="/en">English</a>
                 </li>
             </ul>
-            <!-- <select id="langSel">
-                <option value="/zh">中文</option>
-                <option value="/en">英文</option>
-              </select> -->
         </div>
     </div>
 </nav>

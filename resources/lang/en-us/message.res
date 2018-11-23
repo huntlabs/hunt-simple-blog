@@ -7,7 +7,6 @@ register = register
 
 login = Login
 logout = Logout
-
 about = About
 
 re-password = Re-Password
@@ -16,5 +15,4 @@ leave-comment = leave a comment
 
 location = Location
 mobile = Mobile
-
 save = Save

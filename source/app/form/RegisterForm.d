@@ -1,8 +1,8 @@
-module app.form.FormRegister;
+module app.form.RegisterForm;
 
 import hunt.framework;
 
-class FormRegister : Form
+class RegisterForm : Form
 {
     mixin MakeForm;
 

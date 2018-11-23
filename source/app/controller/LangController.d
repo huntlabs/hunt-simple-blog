@@ -17,8 +17,8 @@ import app.model.User;
 import app.model.Comment;
 import app.model.Post;
 
-import app.form.FormRegister;
-import app.form.FormLogin;
+import app.form.RegisterForm;
+import app.form.LoginForm;
 
 import app.repository.PostRepository;
 import app.repository.UsersRepository;
@@ -33,40 +33,29 @@ class LangController : Controller
     @Action Response zh()
     {
         Cookie cookie;
-        Response response = new Response(this.request);
         cookie = new Cookie("Content-Language", "zh-cn");
         view.setLocale("zh-cn");
 
-        response.setHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=utf-8").withCookie(cookie);
-
-        auto tests = (new PostRepository).findAll();
-        foreach (test; tests)
-        {
-            logInfo(test);
-        }
+        auto posts = (new PostRepository).findAll();
+       
         view.assign("user", UserController.checkUser(request));
-        view.assign("posts", tests);
-        return response.setContent(view.render("index"));
+        view.assign("posts", posts);
+        return response.setContent(view.render("index")).withCookie(cookie);
 
     }
 
     @Action Response en()
     {
         Cookie cookie;
-        Response response = new Response(this.request);
         cookie = new Cookie("Content-Language", "en-us");
         view.setLocale("en-us");
 
-        response.setHeader(HttpHeader.CONTENT_TYPE, "text/html;charset=utf-8").withCookie(cookie);
 
-        auto tests = (new PostRepository).findAll();
-        foreach (test; tests)
-        {
-            logInfo(test);
-        }
+        auto posts = (new PostRepository).findAll();
+
         view.assign("user", UserController.checkUser(request));
-        view.assign("posts", tests);
-        return response.setContent(view.render("index"));
+        view.assign("posts", posts);
+        return response.setContent(view.render("index")).withCookie(cookie);
     }
 
 }

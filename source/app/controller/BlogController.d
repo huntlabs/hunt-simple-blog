@@ -17,7 +17,7 @@ import app.model.User;
 import app.model.Comment;
 import app.model.Post;
 
-import app.form.FormComment;
+import app.form.CommentForm;
 
 import app.repository.PostRepository;
 import app.repository.UsersRepository;
@@ -31,13 +31,9 @@ class BlogController : Controller
 
     @Action string list()
     {
-        auto tests = (new PostRepository).findAll();
-        foreach (test; tests)
-        {
-            logInfo(test);
-        }
+        auto posts = (new PostRepository).findAll();
         view.assign("user", UserController.checkUser(request));
-        view.assign("posts", tests);
+        view.assign("posts", posts);
         return view.render("index");
     }
 
@@ -50,7 +46,7 @@ class BlogController : Controller
         return view.render("post");
     }
 
-    @Action Response post_comment(FormComment cmt)
+    @Action Response comment(CommentForm cmt)
     {
         auto result = cmt.valid();
         if (result.isValid())
