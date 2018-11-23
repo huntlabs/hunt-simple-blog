@@ -6,12 +6,12 @@
     "license": "BSD",
     "targetType" : "executable",
     "dependencies": {
-        "hunt" : "~>1.2.0"
+        "hunt-framework" : "~master"
     },
     "configurations": [{
         "name": "default",
         "subConfigurations": {
-            "hunt":"mysql"
+            "hunt-framework":"mysql"
         }
     }]
 }

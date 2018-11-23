@@ -1,58 +1,31 @@
-module app.repository.CommentsRepository;
+module app.repository.CommentRepository;
 
-import app.model.Comments;
+import app.model.Comment;
 
-import entity.repository;
-import entity;
-class CommentsRepository : EntityRepository!(Comments, int)
+import hunt.entity;
+
+class CommentRepository : EntityRepository!(Comment, int)
 {
     private EntityManager _entityManager;
 
-    this(EntityManager manager = null) {
+    this(EntityManager manager = null)
+    {
         super(manager);
         _entityManager = manager is null ? createEntityManager() : manager;
     }
 
-    struct Objects
+    Comment[] findPostComments(int id)
     {
-        CriteriaBuilder builder;
-        CriteriaQuery!Comments criteriaQuery;
-        Root!Comments root;
+        auto query = _entityManager.createQuery!(Comment)("select c from Comment c where c.comment_post_id = :postId ;");
+        query.setParameter("postId",id);
+        return query.getResultList();
     }
 
-    Objects newObjects()
+    Comment[] getCommentsByUser(int user_id)
     {
-        Objects objects;
-
-        objects.builder = _entityManager.getCriteriaBuilder();
-        objects.criteriaQuery = objects.builder.createQuery!Comments;
-        objects.root = objects.criteriaQuery.from();
-
-        return objects;
-    }
-
-    Comments[] findPostComments(int id)
-    {
-        Comments[] comments;
-        auto objects = this.newObjects();
-        auto p1 = objects.builder.equal(objects.root.Comments.comment_post_id, id);
-        auto typedQuery = _entityManager.createQuery(objects.criteriaQuery.select(objects.root).where( p1 ));
-        comments = typedQuery.getResultList();
-        return comments;
-    }
-
-    Comments[] getCommentsByUser(int user_id)
-    {
-        auto objects = this.newObjects();
-
-        auto p1 = objects.builder.equal(objects.root.Comments.user_id, user_id);
-
-        auto typedQuery = _entityManager.createQuery(objects.criteriaQuery.select(objects.root).where( p1 ));
-
-        Comments[] comments = typedQuery.getResultList();
-        if(comments.length > 0)
-            return comments;
-        return null;
+        auto query = _entityManager.createQuery!(Comment)("select c from Comment c where c.user_id = :uid ;");
+        query.setParameter("uid",user_id);
+        return query.getResultList();
     }
 
 }

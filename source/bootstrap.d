@@ -1,7 +1,9 @@
 
-import hunt;
+import hunt.framework;
 
 void main()
 {
-    app.run();
+    Application app = Application.getInstance();
+    app.enableLocale("./resources/lang","zh-cn");
+	app.start();
 }

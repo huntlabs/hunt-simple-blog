@@ -1,20 +1,18 @@
-module app.model.Users;
+module app.model.User;
 
-import entity;
+import hunt.entity;
 
-public import app.model.Post;
+import app.model.Post;
 
 @Table("hb_users")
-class Users
+class User : Model
 {
-    mixin MakeEntity;
+    mixin MakeModel;
 
     @AutoIncrement
     @PrimaryKey
     int id;
-    @OneToMany("users")
-    //@JoinColumn("id")
-    Post[] posts;
+
     string display_name;
 
     string user_nicename;
@@ -29,4 +27,6 @@ class Users
 
     string user_registered;
 
+    @OneToMany("user")
+    Post[] posts;
 }

@@ -2,12 +2,17 @@
 # [GET,POST,PUT...]    path    controller.method
 #
 
-GET /index blog.list
-GET /post blog.post
-GET /loginpage blog.loginpage
-GET /logout blog.logout
-GET /profile blog.profile
-GET /registerpage blog.registerpage
-POST /comment blog.postComment
-POST /login blog.login
-POST /register blog.register
+
+GET                         /loginpage                  user.login_page
+GET                         /logout                     user.logout
+GET                         /profile                    user.profile
+GET                         /registerpage               user.register_page
+POST                        /login                      user.login
+POST                        /register                   user.register
+
+GET                         /index                      blog.list
+GET                         /post                       blog.post
+POST                        /comment                    blog.post_comment
+
+GET                         /zh                         lang.zh
+GET                         /en                         lang.en

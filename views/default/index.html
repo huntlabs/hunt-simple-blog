@@ -18,8 +18,8 @@
                 <a href="/post?id={{post.id}}" class="btn btn-primary">Read More &rarr;</a>
             </div>
             <div class="card-footer text-muted">
-                {% if post.users.display_name %}
-                    <a href="">{{post.users.display_name}}</a>
+                {% if post.user.display_name %}
+                    <a href="">{{post.user.display_name}}</a>
                 {% else %}
                     <a href="#">unknown author</a>
                 {% endif %}

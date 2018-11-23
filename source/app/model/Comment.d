@@ -1,11 +1,11 @@
-module app.model.Comments;
+module app.model.Comment;
 
-import entity;
+import hunt.entity;
 
 @Table("hb_comments")
-class Comments
+class Comment : Model
 {
-    mixin MakeEntity;
+    mixin MakeModel;
 
     @AutoIncrement
     @PrimaryKey

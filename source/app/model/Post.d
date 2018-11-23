@@ -1,22 +1,17 @@
 module app.model.Post;
 
-import entity;
-import app.model.Users;
+import hunt.entity;
+import app.model.User;
+
 @Table("hb_posts")
-class Post
+class Post : Model
 {
-    mixin MakeEntity;
+    mixin MakeModel;
 
     @AutoIncrement
     @PrimaryKey
     int id;
 
-    @ManyToOne()
-    @JoinColumn("post_author")
-    Users users;
-
-    //@Column("post_title")
-    //string title;
     string post_title;
 
     string post_excerpt;
@@ -27,8 +22,11 @@ class Post
 
     string post_status;
 
-    //int post_author;
 
-    // post & page
     string post_type;
+
+    @ManyToOne()
+    @JoinColumn("post_author","id")
+    User user;
+
 }

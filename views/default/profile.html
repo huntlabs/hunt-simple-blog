@@ -23,14 +23,14 @@
 
                 <div class="text-left m-t-40">
 
-                    <p class="text-muted font-13"><strong>Name :</strong> <span class="m-l-15">{{user.user_login}}</span></p>
+                    <p class="text-muted font-13"><strong>{{lang('message.name')}} :</strong> <span class="m-l-15">{{user.user_login}}</span></p>
 
-                    <p class="text-muted font-13"><strong>Email:</strong> <span class="m-l-15">{{user.user_email}}</span></p>
+                    <p class="text-muted font-13"><strong>{{lang('message.email')}}:</strong> <span class="m-l-15">{{user.user_email}}</span></p>
 
-                    <p class="text-muted font-13"><strong>Mobile :</strong><span class="m-l-15">(0086) 13311611113</span></p>
+                    <p class="text-muted font-13"><strong>{{lang('message.mobile')}} :</strong><span class="m-l-15">(0086) 13311611113</span></p>
 
 
-                    <p class="text-muted font-13"><strong>Location :</strong> <span class="m-l-15">Shanghai</span></p>
+                    <p class="text-muted font-13"><strong>{{lang('message.location')}} :</strong> <span class="m-l-15">Shanghai</span></p>
                 </div>
 
                 <ul class="social-links list-inline m-t-30">
@@ -75,22 +75,22 @@
                     <div class="tab-pane active" style="" id="settings">
                         <form role="form" method="post">
                             <div class="form-group">
-                                <label for="Email">Email(Account)</label>
+                                <label for="Email">{{lang('message.email')}}</label>
                                 <input type="email" disabled value="{{user.user_email}}" id="Email" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="FullName">Name</label>
+                                <label for="FullName">{{lang('message.name')}}</label>
                                 <input type="text" name="name" value="{{user.user_login}}" required data-parsley-maxlength="12" id="FullName" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="Password">Password</label>
+                                <label for="Password">{{lang('message.password')}}</label>
                                 <input type="password" name="password" placeholder="6 - 32 Characters" data-parsley-minlength="6" data-parsley-maxlength="12" id="Password" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="RePassword">Re-Password</label>
+                                <label for="RePassword">{{lang('message.re-password')}}</label>
                                 <input type="password" name="rpassword" placeholder="6 - 32 Characters" data-parsley-minlength="6" data-parsley-maxlength="12" id="RePassword" class="form-control">
                             </div>
-                            <button class="btn btn-primary waves-effect waves-light w-md" type="submit">Save</button>
+                            <button class="btn btn-primary waves-effect waves-light w-md" type="submit">{{lang('message.save')}}</button>
                         </form>
                     </div>
                     <div class="tab-pane active" id="posts">

@@ -1,14 +1,20 @@
 {
 	"fileVersion": 1,
 	"versions": {
-		"cache": "0.0.6",
-		"collie": "0.10.15",
-		"database": "0.1.7",
+		"boringssl": "0.0.1",
 		"dredis": "0.0.9",
-		"entity": "1.5.7",
-		"hunt": "1.2.0",
-		"kiss": "0.4.8",
+		"hunt": "1.0.0-rc.2",
+		"hunt-cache": "0.2.1",
+		"hunt-database": {"path":"../hunt-database"},
+		"hunt-entity": {"path":"../hunt-entity"},
+		"hunt-framework": {"path":"../hunt-framework"},
+		"hunt-http": "0.0.8",
+		"hunt-net": "0.0.8",
+		"hunt-security": "0.0.4",
+		"hunt-sql": "1.0.1",
+		"hunt-stomp": "0.0.1-beta.1",
 		"libmemcached": "1.1.1",
+		"openssl": "1.1.6+1.0.1g",
 		"rocksdb": "0.0.7"
 	}
 }

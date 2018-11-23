@@ -1,19 +1,29 @@
 module app.controller.BlogController;
 
-import hunt;
-import hunt.http.RedirectResponse;
-import kiss.logger;
-import app.repository.PostRepository;
-import app.model.Post;
 import std.json;
-import hunt.http.request;
-import app.repository.UsersRepository;
-import app.model.Users;
-import app.repository.CommentsRepository;
-import app.model.Comments;
-import entity.domain;
 import std.datetime;
 import std.digest.md;
+
+import hunt.framework;
+import hunt.entity;
+import hunt.logging;
+import hunt.util.serialize;
+import hunt.http.codec.http.model.Cookie;
+import hunt.http.codec.http.model.HttpMethod;
+import hunt.http.codec.http.model.HttpHeader;
+import hunt.util.MimeType;
+
+import app.model.User;
+import app.model.Comment;
+import app.model.Post;
+
+import app.form.FormComment;
+
+import app.repository.PostRepository;
+import app.repository.UsersRepository;
+import app.repository.CommentRepository;
+
+import app.controller.UserController;
 
 class BlogController : Controller
 {
@@ -22,10 +32,11 @@ class BlogController : Controller
     @Action string list()
     {
         auto tests = (new PostRepository).findAll();
-        foreach(test; tests){
+        foreach (test; tests)
+        {
             logInfo(test);
         }
-	    view.assign("user",checkuser());
+        view.assign("user", UserController.checkUser(request));
         view.assign("posts", tests);
         return view.render("index");
     }
@@ -34,108 +45,38 @@ class BlogController : Controller
     {
         int id = request.get!int("id");
         view.assign("post", (new PostRepository).findById(id));
-        view.assign("user",checkuser());
-        view.assign("comments", (new CommentsRepository).findPostComments(id));
+        view.assign("user", UserController.checkUser(request));
+        view.assign("comments", (new CommentRepository).findPostComments(id));
         return view.render("post");
     }
 
-    @Action string postComment()
+    @Action Response post_comment(FormComment cmt)
     {
-        int postId = request.post!int("post_id");
-        int commentAuthorId = request.post!int("author_id");
-        string commentAuthor = request.post!string("author");
-        string commentContent = request.post!string("content");
+        auto result = cmt.valid();
+        if (result.isValid())
+        {
+            auto user = UserController.checkUser(request);
 
-        Comments comments = new Comments();
-        comments.comment_post_id = postId;
-        comments.user_id = commentAuthorId;
-        comments.comment_author = commentAuthor;
-        comments.comment_content = commentContent;
-        comments.comment_date = Clock.currTime.toISOExtString(); //Clock.currStdTime();
-        (new CommentsRepository).save(comments);
-        return "success";
-    }
-
-    @Action string loginpage()
-    {
-    	return view.render("login");
-    }
-
-    @Action string registerpage()
-    {
-        return view.render("register");
-    }
-
-    @Action Response login()
-    {
-	 if(request.method() == HttpMethod.Post){
-         
-	     string name = request.post("name","");
-	     string password = request.post("password","");
-	     auto find = (new UsersRepository).findByUserlogin(name);
-	     if(find){
-             auto md5 = new MD5Digest();
-             ubyte[] hash = md5.digest(password);
-            if(find.user_pass == toLower(toHexString(hash))){
-                request.session.set("USER",cast(string) serialize!Users(find));
-            return new RedirectResponse("/index");
-            }else{
-                return new RedirectResponse("/loginpage");
+            Comment comment = new Comment();
+            comment.comment_post_id = cmt.postId;
+            comment.comment_content = cmt.content;
+            comment.comment_date = Clock.currTime.toISOExtString();
+            if (user !is null)
+            {
+                comment.user_id = user.id;
+                comment.comment_author = user.display_name;
             }
-         }
-	 }
-     return new RedirectResponse("/loginpage");
-    }
-
-    @Action Response logout()
-    {
-        if(request.session.has("USER")){
-            request.session.remove("USER");
+            else
+            {
+                comment.comment_author = "匿名";
+            }
+            (new CommentRepository).save(comment);
+            return new RedirectResponse(this.request, "/post?id=" ~ cmt.postId.to!string);
         }
-        return new RedirectResponse("/index");
-    }
-
-    @Action Users checkuser()
-    {
-    	auto str = request.session.get("USER");
-        if (str == null)
-	    return null;
-	    return unserialize!Users(cast(byte[]) str);
-    }
-
-    @Action Response register()
-    {
-        if(request.method() == HttpMethod.Post){
-            string name = request.post("name","");
-            string password = request.post("password","");
-            string email = request.post("email","");
-            auto find = (new UsersRepository).findByUserlogin(name);
-            if(find){
-                return new RedirectResponse("/registerpage");
-            }
-            else{
-                auto md5 = new MD5Digest();
-                ubyte[] hash = md5.digest(password);
-                Users user = new Users();
-                user.user_login = name;
-                user.display_name = name;
-                user.user_nicename = name;
-                user.user_pass = toLower(toHexString(hash));
-                user.user_email = email;
-                user.user_registered = Clock.currTime.toISOExtString(); //Clock.currStdTime();
-                (new UsersRepository).save(user);
-                return new RedirectResponse("/loginpage");
-            }
+        else
+        {
+            return new RedirectResponse(this.request, "/post?id=" ~ cmt.postId.to!string);
         }
-        return new RedirectResponse("/registerpage");
     }
 
-    @Action string profile()
-    {
-        auto user = checkuser();
-        view.assign("posts", (new PostRepository).getPostByUser(user.id));
-        view.assign("comments", (new CommentsRepository).getCommentsByUser(user.id));
-        view.assign("user",user);
-        return view.render("profile");
-    }
 }
