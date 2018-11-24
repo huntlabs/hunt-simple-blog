@@ -14,10 +14,10 @@ class UsersRepository : EntityRepository!(User, int)
         super(_entityManager);
     }
 
-    User findByUserlogin(string user_login)
+    User findByUsername(string username)
     {
-        auto query = _entityManager.createQuery!(User)("SELECT u FROM User u WHERE u.user_login = :name ;");
-        query.setParameter("name",user_login);
+        auto query = _entityManager.createQuery!(User)("SELECT u FROM User u WHERE u.user_login = :name");
+        query.setParameter("name", username);
 
         return query.getSingleResult();
     }

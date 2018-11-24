@@ -3,16 +3,16 @@
 #
 
 
+GET                         /                           blog.list
+GET                         /post                       blog.post
+POST                        /comment                    blog.comment
+
 GET                         /login                      user.login
 POST                        /login                      user.login
 GET                         /register                   user.register
 POST                        /register                   user.register
 GET                         /logout                     user.logout
 GET                         /profile                    user.profile
-
-GET                         /index                      blog.list
-GET                         /post                       blog.post
-POST                        /comment                    blog.comment
 
 GET                         /zh                         lang.zh
 GET                         /en                         lang.en

@@ -18,8 +18,8 @@ class PostRepository : EntityRepository!(Post, int)
 
     Post[] getPostByUser(int user_id)
     {
-        auto query = _entityManager.createQuery!(Post)("SELECT p , u FROM Post p JOIN p.user u WHERE u.id = :uid ;");
-        query.setParameter("uid",user_id);
+        auto query = _entityManager.createQuery!(Post)("SELECT p, u FROM Post p JOIN p.user u WHERE u.id = :uid ;");
+        query.setParameter("uid", user_id);
 
         return query.getResultList();
     }

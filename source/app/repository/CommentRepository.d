@@ -18,6 +18,7 @@ class CommentRepository : EntityRepository!(Comment, int)
     {
         auto query = _entityManager.createQuery!(Comment)("SELECT c FROM Comment c WHERE c.comment_post_id = :postId ;");
         query.setParameter("postId",id);
+
         return query.getResultList();
     }
 
@@ -25,7 +26,7 @@ class CommentRepository : EntityRepository!(Comment, int)
     {
         auto query = _entityManager.createQuery!(Comment)("SELECT c FROM Comment c WHERE c.user_id = :uid ;");
         query.setParameter("uid",user_id);
+
         return query.getResultList();
     }
-
 }

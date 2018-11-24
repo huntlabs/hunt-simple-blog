@@ -1,17 +1,17 @@
 module app.controller.BlogController;
 
-import std.json;
 import std.datetime;
-import std.digest.md;
 
 import hunt.framework;
 import hunt.entity;
 import hunt.logging;
-import hunt.util.serialize;
+
 import hunt.http.codec.http.model.Cookie;
 import hunt.http.codec.http.model.HttpMethod;
 import hunt.http.codec.http.model.HttpHeader;
+
 import hunt.util.MimeType;
+import hunt.util.serialize;
 
 import app.model.User;
 import app.model.Comment;
@@ -23,7 +23,7 @@ import app.repository.PostRepository;
 import app.repository.UsersRepository;
 import app.repository.CommentRepository;
 
-import app.controller.UserController;
+import app.helper.UserHelper;
 
 class BlogController : Controller
 {
@@ -32,30 +32,31 @@ class BlogController : Controller
     @Action string list()
     {
         auto posts = (new PostRepository).findAll();
-        view.assign("user", UserController.checkUser(request));
+        view.assign("user", getLoginedUser());
         view.assign("posts", posts);
+
         return view.render("index");
     }
 
-    @Action string post()
+    @Action string post(int id)
     {
-        int id = request.get!int("id");
         view.assign("post", (new PostRepository).findById(id));
-        view.assign("user", UserController.checkUser(request));
+        view.assign("user", getLoginedUser());
         view.assign("comments", (new CommentRepository).findPostComments(id));
+
         return view.render("post");
     }
 
-    @Action Response comment(CommentForm cmt)
+    @Action Response comment(CommentForm commentForm)
     {
-        auto result = cmt.valid();
+        auto result = commentForm.valid();
         if (result.isValid())
         {
-            auto user = UserController.checkUser(request);
+            auto user = getLoginedUser();
 
             Comment comment = new Comment();
-            comment.comment_post_id = cmt.postId;
-            comment.comment_content = cmt.content;
+            comment.comment_post_id = commentForm.postId;
+            comment.comment_content = commentForm.content;
             comment.comment_date = Clock.currTime.toISOExtString();
             if (user !is null)
             {
@@ -64,14 +65,17 @@ class BlogController : Controller
             }
             else
             {
-                comment.comment_author = "匿名";
+                comment.user_id = 0;
+                comment.comment_author = "Guest";
             }
+
             (new CommentRepository).save(comment);
-            return new RedirectResponse(this.request, "/post?id=" ~ cmt.postId.to!string);
+
+            return new RedirectResponse("/post?id=" ~ commentForm.postId.to!string);
         }
         else
         {
-            return new RedirectResponse(this.request, "/post?id=" ~ cmt.postId.to!string);
+            return new RedirectResponse("/post?id=" ~ commentForm.postId.to!string);
         }
     }
 

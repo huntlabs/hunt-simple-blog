@@ -9,6 +9,6 @@ class CommentForm : Form
     @Min(0)
     int postId;
 
-    @Length(1,200)
+    @Length(1, 10000)
     string content;
 }

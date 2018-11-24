@@ -1,12 +1,12 @@
 {
     "name": "huntblog",
-    "description": "An blog application based on hunt framework.",
+    "description": "Simple blog application based on hunt framework.",
     "copyright": "Copyright © 2017, huntframework.com",
     "homepage": "http://www.huntframework.com/",
     "license": "BSD",
     "targetType" : "executable",
     "dependencies": {
-        "hunt-framework" : "~master"
+        "hunt-framework" : "v2.0.0-beta.3"
     },
     "configurations": [{
         "name": "default",
